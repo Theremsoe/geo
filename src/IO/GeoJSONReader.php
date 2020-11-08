@@ -77,13 +77,9 @@ class GeoJSONReader
     }
 
     /**
-     * @param array $geojson
-     *
-     * @return Geometry
-     *
      * @throws GeometryException If the GeoJSON file is invalid.
      */
-    private function readGeoJSON(array $geojson) : Geometry
+    public function readGeoJSON(array $geojson) : Geometry
     {
         if (! isset($geojson['type']) || ! is_string($geojson['type'])) {
             throw GeometryIOException::invalidGeoJSON('Missing or malformed "type" attribute.');
