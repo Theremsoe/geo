@@ -29,21 +29,38 @@ class GeoJSONWriter
     }
 
     /**
-     * @param Geometry $geometry The geometry to export as GeoJSON.
+     * Convert a geometry to RFC 7946 string.
      *
-     * @return string The GeoJSON representation of the given geometry.
+     * @param Geometry $geometry the geometry to export as GeoJSON
      *
-     * @throws GeometryIOException If the given geometry cannot be exported as GeoJSON.
+     * @throws GeometryIOException if the given geometry cannot be exported as GeoJSON
      */
-    public function write(Geometry $geometry) : string
+    public function write(Geometry $geometry): string
     {
-        if ($geometry instanceof GeometryCollection
-            // Filter out MultiPoint, MultiLineString and MultiPolygon
-            && $geometry->geometryType() === 'GeometryCollection') {
-            return $this->writeFeatureCollection($geometry);
-        }
+        return $this->genGeoJSONString(
+            $this->toArray($geometry)
+        );
+    }
 
-        return $this->genGeoJSONString($this->formatGeoJSONGeometry($geometry));
+    /**
+     * Convert a geometry to RFC 7946 array.
+     *
+     * @param Geometry $geometry the geometry to export as GeoJSON
+     *
+     * @throws GeometryIOException if the given geometry cannot be exported as GeoJSON
+     */
+    public function toArray(Geometry $geometry): array
+    {
+        return self::isGeometricCollection($geometry)
+        ? $this->writeFeatureCollection($geometry)
+        : $this->formatGeoJSONGeometry($geometry);
+    }
+
+    public static function isGeometricCollection(Geometry $geometry): bool
+    {
+        return $geometry instanceof GeometryCollection
+        // Filter out MultiPoint, MultiLineString and MultiPolygon
+        && 'GeometryCollection' === $geometry->geometryType();
     }
 
     /**
