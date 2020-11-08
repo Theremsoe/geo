@@ -95,11 +95,10 @@ class GeoJSONWriter
     /**
      * @param GeometryCollection $geometryCollection
      *
-     * @return string
      *
      * @throws GeometryIOException
      */
-    private function writeFeatureCollection(GeometryCollection $geometryCollection) : string
+    private function writeFeatureCollection(GeometryCollection $geometryCollection) : array
     {
         $geojsonArray = [
             'type' => 'FeatureCollection',
@@ -113,7 +112,7 @@ class GeoJSONWriter
             ];
         }
 
-        return $this->genGeoJSONString($geojsonArray);
+        return $geojsonArray;
     }
 
     /**
