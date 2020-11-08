@@ -10,6 +10,7 @@ use Brick\Geo\Exception\GeometryEngineException;
 use Brick\Geo\Exception\GeometryIOException;
 use Brick\Geo\Exception\InvalidGeometryException;
 use Brick\Geo\Exception\UnexpectedGeometryException;
+use Brick\Geo\IO\GeoJSONWriter;
 use Brick\Geo\IO\WKTReader;
 use Brick\Geo\IO\WKTWriter;
 use Brick\Geo\IO\WKBReader;
@@ -767,5 +768,15 @@ abstract class Geometry implements \Countable, \IteratorAggregate
     final public function __toString() : string
     {
         return $this->asText();
+    }
+
+    final public function toGeoJSON(): string
+    {
+        return (new GeoJSONWriter())->write($this);
+    }
+
+    final public function toGeoJSONArray(): array
+    {
+        return (new GeoJSONWriter())->toArray($this);
     }
 }
